@@ -2833,6 +2833,7 @@ void client_try_configure(ObClient *self, gint *x, gint *y, gint *w, gint *h,
     {
         gint basew, baseh, minw, minh;
         gint incw, inch;
+        gint log_w, log_h;
         gfloat minratio, maxratio;
 
         incw = self->fullscreen || self->max_horz ? 1 : self->size_inc.width;
@@ -2873,19 +2874,22 @@ void client_try_configure(ObClient *self, gint *x, gint *y, gint *w, gint *h,
         *h -= baseh;
 
         /* keep to the increments */
-        *w /= incw;
-        *h /= inch;
+        log_w = w / incw;
+        log_h = h / inch;
 
+        /* XXX this bit */
         /* you cannot resize to nothing */
-        if (basew + *w < 1) *w = 1 - basew;
-        if (baseh + *h < 1) *h = 1 - baseh;
+        if (basew + log_w < 1) *w = 1 - basew;
+        if (baseh + log_h < 1) *h = 1 - baseh;
 
         /* save the logical size */
-        *logicalw = incw > 1 ? *w : *w + basew;
-        *logicalh = inch > 1 ? *h : *h + baseh;
+        *logicalw = incw > 1 ? log_w : log_w + basew;
+        *logicalh = inch > 1 ? log_h : log_h + baseh;
 
-        *w *= incw;
-        *h *= inch;
+        if (user) {
+            *w = log_w * incw;
+            *h = log_h * inch;
+        }
 
         *w += basew;
         *h += baseh;
