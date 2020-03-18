@@ -79,7 +79,7 @@ static gboolean desk_menu_update(ObMenuFrame *frame, gpointer data)
         }
     }
 
-    if (empty || onlyiconic) {
+    if (config_menu_show_go_there && (empty || onlyiconic)) {
         ObMenuEntry *e;
 
         /* no entries or only iconified windows, so add a

@@ -209,6 +209,8 @@ extern guint    config_submenu_show_delay;
 extern guint    config_submenu_hide_delay;
 /*! Show manage desktops in client_list_menu */
 extern gboolean config_menu_manage_desktops;
+/*! Show "Go there..." menu in client_list_menu */
+extern gboolean config_menu_show_go_there;
 /*! Load & show icons in user-defined menus */
 extern gboolean config_menu_show_icons;
 /*! User-specified menu files */

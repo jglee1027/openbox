@@ -97,6 +97,7 @@ gboolean config_menu_middle;
 guint    config_submenu_show_delay;
 guint    config_submenu_hide_delay;
 gboolean config_menu_manage_desktops;
+gboolean config_menu_show_go_there;
 gboolean config_menu_show_icons;
 
 GSList *config_menu_files;
@@ -949,6 +950,8 @@ static void parse_menu(xmlNodePtr node, gpointer d)
         config_submenu_hide_delay = obt_xml_node_int(n);
     if ((n = obt_xml_find_node(node, "manageDesktops")))
         config_menu_manage_desktops = obt_xml_node_bool(n);
+    if ((n = obt_xml_find_node(node, "showGoThere")))
+        config_menu_show_go_there = obt_xml_node_bool(n);
     if ((n = obt_xml_find_node(node, "showIcons"))) {
         config_menu_show_icons = obt_xml_node_bool(n);
 #if !defined(USE_IMLIB2) && !defined(USE_LIBRSVG)
@@ -1165,6 +1168,7 @@ void config_startup(ObtXmlInst *i)
     config_submenu_show_delay = 100;
     config_submenu_hide_delay = 400;
     config_menu_manage_desktops = TRUE;
+    config_menu_show_go_there = TRUE;
     config_menu_files = NULL;
     config_menu_show_icons = TRUE;
 

@@ -91,7 +91,7 @@ static gboolean self_update(ObMenuFrame *frame, gpointer data)
                 s = (s + 1) % shortcuts_len;
             }
         }
-        if (empty || onlyiconic) {
+        if (config_menu_show_go_there && (empty || onlyiconic)) {
             /* no entries or only iconified windows, so add a
              * way to go to this desktop without uniconifying a window */
             if (!empty)
