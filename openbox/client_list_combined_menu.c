@@ -48,7 +48,13 @@ static gboolean self_update(ObMenuFrame *frame, gpointer data)
     ObMenuEntry *e;
     GList *it;
     guint desktop;
-
+    gchar shortcuts[] =
+        "abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "1234567890"
+        "!@#$%^&*()";
+    guint shortcuts_len = sizeof(shortcuts) / sizeof(shortcuts[0]);
+    guint s = 0;
     menu_clear_entries(menu);
 
     for (desktop = 0; desktop < screen_num_desktops; desktop++) {
@@ -65,12 +71,13 @@ static gboolean self_update(ObMenuFrame *frame, gpointer data)
                 empty = FALSE;
 
                 if (c->iconic) {
-                    gchar *title = g_strdup_printf("(%s)", c->icon_title);
-                    e = menu_add_normal(menu, desktop, title, NULL, FALSE);
+                    gchar *title = g_strdup_printf("_%c: (%s)", shortcuts[s], c->icon_title);
+                    e = menu_add_normal(menu, desktop, title, NULL, TRUE);
                     g_free(title);
                 } else {
                     onlyiconic = FALSE;
-                    e = menu_add_normal(menu, desktop, c->title, NULL, FALSE);
+                    gchar *title = g_strdup_printf("_%c: %s", shortcuts[s], c->title);
+                    e = menu_add_normal(menu, desktop, title, NULL, TRUE);
                 }
 
                 if (config_menu_show_icons) {
@@ -81,9 +88,9 @@ static gboolean self_update(ObMenuFrame *frame, gpointer data)
                 }
 
                 e->data.normal.data = c;
+                s = (s + 1) % shortcuts_len;
             }
         }
-
         if (empty || onlyiconic) {
             /* no entries or only iconified windows, so add a
              * way to go to this desktop without uniconifying a window */
@@ -98,9 +105,9 @@ static gboolean self_update(ObMenuFrame *frame, gpointer data)
 
     if (config_menu_manage_desktops) {
         menu_add_separator(menu, SEPARATOR, _("Manage desktops"));
-        menu_add_normal(menu, ADD_DESKTOP, _("_Add new desktop"), NULL, TRUE);
-        menu_add_normal(menu, REMOVE_DESKTOP, _("_Remove last desktop"),
-                        NULL, TRUE);
+        menu_add_normal(menu, ADD_DESKTOP, _("Add new desktop"), NULL, FALSE);
+        menu_add_normal(menu, REMOVE_DESKTOP, _("Remove last desktop"),
+                        NULL, FALSE);
     }
 
     return TRUE; /* always show the menu */
